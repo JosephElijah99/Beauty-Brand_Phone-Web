@@ -18,10 +18,9 @@
 /* CEO SECTION */
 .ceo-section{background:var(--white);border:1px solid var(--ivd);padding:1.5rem;margin-bottom:3rem;display:flex;flex-direction:column;gap:1.5rem}
 .ceo-img-wrap{flex-shrink:0;align-self:center}
-.ceo-photo-placeholder{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,var(--gd),var(--gs));display:flex;align-items:center;justify-content:center;font-size:56px;margin:0 auto;position:relative;border:4px solid var(--ivd)}
-.ceo-photo-placeholder::after{content:'CEO';position:absolute;bottom:-2px;right:-2px;background:var(--gold);color:var(--gd);font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;font-weight:500;border-radius:2px}
-/* TO ADD CEO PHOTO: replace .ceo-photo-placeholder div with:
-   <img src="YOUR_PHOTO_URL" style="width:160px;height:160px;border-radius:50%;object-fit:cover;border:4px solid var(--ivd)"> */
+.ceo-photo-real{position:relative;width:180px;height:180px;margin:0 auto}
+.ceo-photo-real img{width:180px;height:180px;border-radius:50%;object-fit:cover;object-position:top center;border:4px solid var(--ivd);display:block;box-shadow:0 8px 28px rgba(26,58,42,.2)}
+.ceo-badge{position:absolute;bottom:4px;right:-4px;background:var(--gold);color:var(--gd);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;font-weight:500;white-space:nowrap}
 .ceo-info{}
 .ceo-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
 .ceo-name{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gd);margin-bottom:.2rem}
@@ -44,7 +43,7 @@
   .about-intro{flex-direction:row;align-items:center}
   .about-visual{height:320px;width:45%;flex-shrink:0}
   .ceo-section{flex-direction:row;align-items:flex-start;gap:2rem}
-  .ceo-photo-placeholder{width:200px;height:200px}
+  .ceo-photo-real{width:220px;height:220px}.ceo-photo-real img{width:220px;height:220px}
   .values-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media(min-width:900px){.values-grid{grid-template-columns:repeat(3,1fr)}}
@@ -73,9 +72,10 @@
   <div class="sec-head reveal"><h2>Meet the Founder</h2><p>The vision behind RASAMI Beauty</p></div>
   <div class="ceo-section reveal">
     <div class="ceo-img-wrap">
-      <div class="ceo-photo-placeholder">👩🏾</div>
-      <!-- TO ADD REAL PHOTO: delete the div above and add:
-      <img src="YOUR_CLOUDINARY_OR_GITHUB_PHOTO_URL" style="width:160px;height:160px;border-radius:50%;object-fit:cover;object-position:top;border:4px solid var(--ivd);display:block;margin:0 auto"> -->
+      <div class="ceo-photo-real">
+        <img src="https://raw.githubusercontent.com/JosephElijah99/Beauty-Brand_Phone-Web/main/Images/AMIRA%20CEO_RASAMI.JPG" alt="Amira Aliyu Abarshi – Founder & CEO, RASAMI Beauty" onerror="this.parentElement.innerHTML='👩🏾'">
+        <div class="ceo-badge">CEO & Founder</div>
+      </div>
     </div>
     <div class="ceo-info">
       <p class="ceo-tag">Founder & CEO</p>

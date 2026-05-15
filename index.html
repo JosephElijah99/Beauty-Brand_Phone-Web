@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RASAMI Beauty – Natural Skincare</title>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+.video-hero{position:relative;height:100svh;min-height:500px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--gd)}
+.video-hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.video-placeholder{position:absolute;inset:0;background:linear-gradient(135deg,var(--gd) 0%,var(--gm) 50%,var(--gs) 100%);display:flex;align-items:center;justify-content:center}
+.vp-emojis{font-size:clamp(48px,10vw,80px);animation:floatEmoji 4s ease-in-out infinite;letter-spacing:1rem;position:relative;z-index:1}
+@keyframes floatEmoji{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.vp-ring{position:absolute;border-radius:50%;border:1px solid rgba(184,150,90,.2);animation:pulse 3s ease-in-out infinite}
+.vp-r1{width:min(300px,70vw);height:min(300px,70vw)}
+.vp-r2{width:min(450px,90vw);height:min(450px,90vw);animation-delay:.8s}
+.vp-r3{width:min(600px,110vw);height:min(600px,110vw);animation-delay:1.6s}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.05);opacity:.2}}
+.video-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,58,42,.6) 0%,rgba(26,58,42,.3) 50%,rgba(26,58,42,.75) 100%);pointer-events:none;z-index:1}
+.hero-content{position:relative;z-index:2;text-align:center;padding:1.5rem;max-width:680px;width:100%}
+.hero-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--goldl);margin-bottom:1rem;display:block}
+.hero-content h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,8vw,5rem);font-weight:300;color:var(--iv);line-height:1.05;margin-bottom:1rem}
+.hero-content h1 em{color:var(--goldl);font-style:italic}
+.hero-content p{color:var(--gmt);font-size:13px;font-weight:300;max-width:380px;margin:0 auto 2rem;line-height:1.9}
+.hero-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.hero-btns a{width:auto;padding:12px 28px}
+.scroll-hint{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:5px;color:rgba(248,244,236,.45);font-size:9px;letter-spacing:2px;text-transform:uppercase;animation:bob 2s ease-in-out infinite}
+.scroll-hint span{width:1px;height:32px;background:linear-gradient(to bottom,transparent,rgba(184,150,90,.5));display:block}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
+.marquee-strip{background:var(--gold);padding:.55rem 0;overflow:hidden;white-space:nowrap}
+.marquee-inner{display:inline-flex;animation:marquee 20s linear infinite}
+.marquee-inner span{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gd);font-weight:500;padding:0 2rem}
+.marquee-inner span::after{content:'·';margin-left:2rem}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.strip{background:var(--ivw);border-bottom:1px solid var(--ivd);padding:.75rem 1rem;display:flex;gap:.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.cat-btn{background:transparent;border:1px solid var(--ivd);padding:7px 16px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tmu);white-space:nowrap;transition:all .2s;font-weight:400;cursor:pointer;flex-shrink:0;font-family:'Jost',sans-serif}
+.cat-btn.active,.cat-btn:hover{background:var(--gd);color:var(--iv);border-color:var(--gd)}
+.products-section{padding:2.5rem 1rem}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;max-width:1150px;margin:0 auto}
+.pcard{background:var(--white);border:1px solid var(--ivd);transition:transform .25s,box-shadow .25s;position:relative;cursor:pointer}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(26,58,42,.12)}
+.pcard-img{aspect-ratio:1;overflow:hidden;position:relative;background:var(--ivw)}
+.pcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.pcard:hover .pcard-img img{transform:scale(1.04)}
+.badge{position:absolute;top:8px;left:8px;background:var(--gd);color:var(--iv);font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;font-weight:400;z-index:1}
+.badge.new{background:var(--gold);color:var(--gd)}
+.badge.out{background:var(--danger);color:var(--white);left:auto;right:8px}
+.pcard-body{padding:.75rem}
+.pcard-cat{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--tmu);margin-bottom:3px}
+.pcard-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;color:var(--td);margin-bottom:3px;line-height:1.2}
+.pcard-key{font-size:9px;color:var(--gs);margin-bottom:8px;font-weight:300;line-height:1.5}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.pcard-price{font-size:13px;font-weight:500;color:var(--gd)}
+.add-btn{background:var(--gd);color:var(--iv);border:none;padding:7px 12px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:400;transition:background .2s;cursor:pointer;font-family:'Jost',sans-serif}
+.add-btn:hover{background:var(--gs)}
+.out-btn{background:var(--ivd);color:var(--tmu);border:none;padding:7px 12px;font-size:9px;text-transform:uppercase;cursor:not-allowed;font-family:'Jost',sans-serif}
+.view-tip{font-size:9px;letter-spacing:1px;color:var(--tmu);display:block;text-align:center;margin-top:4px;font-weight:300}
+/* HEALTH SECTION */
+.health-section{padding:2.5rem 1.25rem;background:var(--iv)}
+.health-inner{max-width:1000px;margin:0 auto}
+.health-block{display:flex;flex-direction:column;gap:2rem;margin-bottom:2.5rem}
+.health-block:last-child{margin-bottom:0}
+.health-text{flex:1}
+.health-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;font-weight:400}
+.health-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,5vw,2.3rem);font-weight:300;color:var(--gd);line-height:1.25;margin-bottom:.75rem}
+.health-text h2 em{color:var(--gold);font-style:italic}
+.health-text p{font-size:13px;color:var(--tm);line-height:1.95;font-weight:300}
+.health-img-wrap{position:relative;align-self:center;width:100%;max-width:380px;margin:0 auto}
+.health-placeholder{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--gd),var(--gm));display:flex;align-items:center;justify-content:center;font-size:clamp(36px,8vw,64px)}
+.health-float-badge{position:absolute;background:var(--gd);color:var(--iv);padding:.5rem .9rem;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:300;line-height:1.6}
+.health-float-badge.tl{top:-10px;left:-10px}
+.health-float-badge.br{bottom:-10px;right:-10px;background:var(--gold);color:var(--gd)}
+.health-divider{height:1px;background:linear-gradient(to right,transparent,var(--ivd),transparent);margin:2rem 0}
+.stats-band{background:var(--gd);padding:2rem 1.25rem}
+.stats-inner{max-width:800px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;text-align:center}
+.stat-item .sv{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:300;color:var(--goldl)}
+.stat-item .sl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gmt);margin-top:3px;font-weight:300}
+@media(min-width:600px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .health-block{flex-direction:row;align-items:center;gap:3rem}
+  .health-block.rev{flex-direction:row-reverse}
+  .health-img-wrap{max-width:420px;flex-shrink:0}
+  .stats-inner{grid-template-columns:repeat(4,1fr)}
+  .pcard-name{font-size:1.1rem}
+}
+@media(min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}.products-section{padding:3rem 2rem}}
+</style>
+</head>
+<body>
+
+<section class="video-hero">
+  <div class="video-placeholder">
+    <div class="vp-ring vp-r1"></div><div class="vp-ring vp-r2"></div><div class="vp-ring vp-r3"></div>
+    <div class="vp-emojis">🌿🌹✨</div>
+  </div>
+  <!--
+  TO ADD YOUR VIDEO:
+  1. Upload to Cloudinary → copy the URL
+  2. Delete the video-placeholder div above
+  3. Uncomment and replace URL below:
+  <video autoplay muted loop playsinline>
+    <source src="YOUR_CLOUDINARY_VIDEO_URL" type="video/mp4">
+  </video>
+  -->
+  <div class="hero-content">
+    <span class="hero-tag">Natural Skincare · Made for African Skin</span>
+    <h1>Reveal Your<br><em>Radiant Self</em></h1>
+    <p>Luxurious botanicals crafted for beauty that is authentically, unapologetically yours.</p>
+    <div class="hero-btns">
+      <a class="btn-gold" href="#products">Shop the Collection</a>
+      <a class="btn-ghost" href="about.html">Our Story</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><span></span>Scroll</div>
+</section>
+
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span>Free Delivery Over ₦25,000</span><span>100% Natural Ingredients</span><span>Dermatologist Tested</span>
+    <span>Made for African Skin</span><span>Paystack Secured Checkout</span><span>WhatsApp Support</span>
+    <span>Free Delivery Over ₦25,000</span><span>100% Natural Ingredients</span><span>Dermatologist Tested</span>
+    <span>Made for African Skin</span><span>Paystack Secured Checkout</span><span>WhatsApp Support</span>
+  </div>
+</div>
+
+<div class="strip">
+  <button class="cat-btn active" onclick="filterCat('all',this)">All</button>
+  <button class="cat-btn" onclick="filterCat('Serum',this)">Serums</button>
+  <button class="cat-btn" onclick="filterCat('Moisturizer',this)">Moisturizers</button>
+  <button class="cat-btn" onclick="filterCat('Cleanser',this)">Cleansers</button>
+  <button class="cat-btn" onclick="filterCat('Body',this)">Body Care</button>
+  <button class="cat-btn" onclick="filterCat('Soap',this)">Soaps</button>
+</div>
+
+<section class="products-section" id="products">
+  <div class="sec-head reveal"><h2>The Collection</h2><p>Each formula, a ritual · Each ingredient, a promise</p></div>
+  <div class="grid" id="productsGrid"></div>
+</section>
+
+<section class="health-section">
+  <div class="health-inner">
+    <div class="health-block reveal">
+      <div class="health-text">
+        <p class="health-tag">Why RASAMI Beauty</p>
+        <h2>Your skin deserves only<br>the <em>purest nature</em> offers</h2>
+        <p>Every RASAMI Beauty formula is built on a simple belief — that what you put on your skin should be as clean and intentional as what you put in your body. We source only the finest botanical actives, free from harmful chemicals, to deliver real results you can see and feel.</p>
+      </div>
+      <div class="health-img-wrap">
+        <div class="health-placeholder">🌿</div>
+        <div class="health-float-badge tl">100% Natural<br>Ingredients</div>
+        <div class="health-float-badge br">No Parabens<br>No Sulfates</div>
+      </div>
+    </div>
+    <div class="health-divider"></div>
+    <div class="health-block rev reveal">
+      <div class="health-text">
+        <p class="health-tag">Formulated for You</p>
+        <h2><em>African skin</em> deserves<br>African expertise</h2>
+        <p>Melanin-rich skin is beautiful, resilient, and unique — and it deserves formulas that understand it. RASAMI Beauty products are specifically developed to address hyperpigmentation, uneven tone, dryness, and sensitivity unique to African skin.</p>
+      </div>
+      <div class="health-img-wrap">
+        <div class="health-placeholder">✨</div>
+        <div class="health-float-badge tl">Dermatologist<br>Tested</div>
+        <div class="health-float-badge br">Made for<br>African Skin</div>
+      </div>
+    </div>
+    <div class="health-divider"></div>
+    <div class="health-block reveal">
+      <div class="health-text">
+        <p class="health-tag">Our Promise</p>
+        <h2>Luxury skincare that<br>doesn't <em>compromise</em></h2>
+        <p>We believe premium skincare should be accessible to every Nigerian. RASAMI Beauty brings you international luxury quality, crafted with African botanicals, at honest prices. Because beautiful skin is not a privilege — it's your right.</p>
+      </div>
+      <div class="health-img-wrap">
+        <div class="health-placeholder">🌹</div>
+        <div class="health-float-badge tl">Ethically<br>Sourced</div>
+        <div class="health-float-badge br">Made with<br>Love in Nigeria</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="sv">8+</div><div class="sl">Products</div></div>
+    <div class="stat-item"><div class="sv">100%</div><div class="sl">Natural</div></div>
+    <div class="stat-item"><div class="sv">36</div><div class="sl">States Served</div></div>
+    <div class="stat-item"><div class="sv">★★★★★</div><div class="sl">Rated</div></div>
+  </div>
+</div>
+
+<div class="features reveal">
+  <div class="feat-grid">
+    <div><div class="fi">🌿</div><div class="feat-title">100% Natural</div><div class="feat-desc">Africa's finest botanicals</div></div>
+    <div><div class="fi">📦</div><div class="feat-title">Fast Delivery</div><div class="feat-desc">2–5 days nationwide</div></div>
+    <div><div class="fi">🔒</div><div class="feat-title">Secure Payment</div><div class="feat-desc">Powered by Paystack</div></div>
+    <div><div class="fi">✉️</div><div class="feat-title">Email Updates</div><div class="feat-desc">Instant confirmation</div></div>
+    <div><div class="fi">💬</div><div class="feat-title">WhatsApp Support</div><div class="feat-desc">Chat anytime</div></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+renderNav(); renderFooter(); injectCartAndModal(); updateCartUI();
+function renderProducts(filter){
+  const list=filter==='all'?PRODUCTS:PRODUCTS.filter(p=>p.cat===filter);
+  document.getElementById('productsGrid').innerHTML=list.map(p=>`
+    <div class="pcard reveal" onclick="openProduct(${p.id})">
+      <div class="pcard-img">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.background='var(--ivw)';this.remove()">
+        ${p.badge?`<div class="badge${p.isNew?' new':''}">${p.badge}</div>`:''}
+        ${p.stock===0?`<div class="badge out">Sold Out</div>`:''}
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-cat">${p.cat}</div>
+        <div class="pcard-name">${p.name}</div>
+        <div class="pcard-key">${p.keyIngredients}</div>
+        <div class="pcard-foot">
+          <div class="pcard-price">₦${p.price.toLocaleString()}</div>
+          ${p.stock>0?`<button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">Add</button>`:`<button class="out-btn" disabled>Sold Out</button>`}
+        </div>
+        <span class="view-tip">Tap for details →</span>
+      </div>
+    </div>`).join('');
+  observeReveal();
+}
+function filterCat(cat,btn){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderProducts(cat);}
+function observeReveal(){const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:.08});document.querySelectorAll('.reveal:not(.visible)').forEach(el=>io.observe(el));}
+renderProducts('all'); observeReveal();
+</script>
+</body>
+</html>

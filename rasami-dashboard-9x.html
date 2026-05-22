@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RASAMI Beauty — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+/* ── LOGIN ── */
+.login-wrap{min-height:100vh;background:var(--gd);display:flex;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow:hidden}
+.login-wrap::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;border:1px solid rgba(184,150,90,.15);top:-100px;right:-100px}
+.login-wrap::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(184,150,90,.1);bottom:-80px;left:-80px}
+.login-box{background:var(--iv);width:100%;max-width:400px;padding:2.5rem;position:relative;z-index:1}
+.login-logo{text-align:center;margin-bottom:2rem}
+.login-logo img{height:60px;width:60px;object-fit:cover;border-radius:50%;margin:0 auto .75rem;display:block;border:3px solid var(--ivd)}
+.login-brand{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--gd);letter-spacing:2px;text-transform:uppercase}
+.login-brand em{color:var(--goldl);font-style:italic}
+.login-sub{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--tmu);margin-top:.25rem}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--gd);text-align:center;margin-bottom:1.5rem}
+.login-err{background:#fde8e8;border:1px solid #f5c6c6;padding:.75rem;font-size:12px;color:var(--danger);margin-bottom:1rem;display:none;text-align:center;border-radius:2px}
+.login-err.show{display:block}
+.login-loading{text-align:center;padding:1rem;font-size:12px;color:var(--tmu);display:none}
+.login-loading.show{display:block}
+.secure-badge{display:flex;align-items:center;gap:6px;background:var(--ivw);padding:.6rem .9rem;margin-top:1rem;font-size:10px;color:var(--tmu);letter-spacing:1px}
+.secure-badge svg{flex-shrink:0}
+
+/* ── ADMIN SHELL ── */
+.admin-shell{display:none}
+.admin-shell.open{display:flex;flex-direction:column;min-height:100vh;background:var(--ivw)}
+.admin-topbar{background:var(--gd);padding:.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.atb-brand{display:flex;align-items:center;gap:10px}
+.atb-logo-img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(184,150,90,.4)}
+.atb-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--iv);letter-spacing:2px}
+.atb-name em{color:var(--goldl);font-style:italic}
+.atb-right{display:flex;align-items:center;gap:.75rem}
+.atb-user{font-size:10px;color:var(--gmt);letter-spacing:1px}
+.atb-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--iv);padding:6px 14px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;text-decoration:none}
+.atb-btn:hover{border-color:var(--goldl);color:var(--goldl)}
+.atb-btn.danger:hover{border-color:#f87171;color:#f87171}
+
+/* ── ADMIN BODY ── */
+.admin-body{flex:1;padding:1.5rem 1.25rem;max-width:1200px;margin:0 auto;width:100%}
+.admin-page-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--gd);margin-bottom:.25rem}
+.admin-page-sub{font-size:10px;color:var(--tmu);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem}
+
+/* ── TABS ── */
+.admin-tabs{display:flex;overflow-x:auto;border-bottom:2px solid var(--ivd);margin-bottom:1.5rem;gap:0;scrollbar-width:none}
+.admin-tabs::-webkit-scrollbar{display:none}
+.atab{background:transparent;border:none;padding:.75rem 1.25rem;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--tmu);cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.atab:hover{color:var(--gd)}
+.atab.active{color:var(--gd);border-bottom-color:var(--gd);font-weight:500}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:var(--white);border:1px solid var(--ivd);padding:1.25rem;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--gd)}
+.stat-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--tmu);margin-bottom:.4rem}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gd)}
+.stat-sub{font-size:10px;color:var(--gs);margin-top:2px}
+
+/* ── TABLES ── */
+.admin-card{background:var(--white);border:1px solid var(--ivd);margin-bottom:1.5rem;overflow:hidden}
+.admin-card-head{background:var(--gd);padding:.75rem 1.25rem;display:flex;justify-content:space-between;align-items:center}
+.admin-card-head h3{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--iv);letter-spacing:1.5px}
+.admin-card-head span{font-size:10px;color:var(--gmt)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:500px}
+th{text-align:left;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--tmu);padding:.6rem 1rem;border-bottom:1px solid var(--ivd);background:var(--ivw);font-weight:400;white-space:nowrap}
+td{padding:.75rem 1rem;font-size:12px;color:var(--tm);border-bottom:1px solid var(--ivd);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--ivw)}
+.badge-paid{display:inline-block;padding:2px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:#e8f5ee;color:var(--success)}
+.badge-shipped{display:inline-block;padding:2px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:#e3f2fd;color:#1565c0}
+.act-btn{background:transparent;border:1px solid var(--ivd);padding:4px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--tm);cursor:pointer;transition:all .2s;font-family:'Jost',sans-serif}
+.act-btn:hover{background:var(--gd);color:var(--iv);border-color:var(--gd)}
+
+/* ── PRODUCTS ADMIN ── */
+.prod-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;padding:1rem}
+.pa-card{border:1px solid var(--ivd);padding:1rem;background:var(--ivw)}
+.pa-img{width:48px;height:48px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.pa-top{display:flex;gap:10px;align-items:flex-start;margin-bottom:.75rem}
+.pa-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;color:var(--td)}
+.pa-cat{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tmu)}
+.pa-price{font-size:12px;font-weight:500;color:var(--gd);margin-top:3px}
+.pa-stock-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tmu);margin-bottom:.5rem}
+.sd{width:8px;height:8px;border-radius:50%;display:inline-block}
+.sd.in{background:#27ae60}.sd.low{background:#f39c12}.sd.out{background:#e74c3c}
+.pa-btns{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ── EMAIL LOG ── */
+.email-entries{padding:0}
+.email-entry{padding:.9rem 1.25rem;border-bottom:1px solid var(--ivd);display:flex;gap:1rem;align-items:center}
+.email-entry:last-child{border-bottom:none}
+.email-icon-box{width:34px;height:34px;background:var(--ivw);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.email-to{font-size:12px;color:var(--td);font-weight:500}
+.email-sub{font-size:11px;color:var(--tmu);margin-top:2px}
+.email-time{font-size:9px;color:var(--tmu)}
+.email-sent-badge{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--success);background:#e8f5ee;padding:2px 8px;margin-left:auto;white-space:nowrap}
+
+/* ── SETTINGS ── */
+.settings-grid-wrap{display:grid;grid-template-columns:1fr;gap:1.5rem}
+.settings-card{background:var(--white);border:1px solid var(--ivd);padding:1.5rem}
+.settings-card h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--gd);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--ivd)}
+.settings-note{font-size:11px;color:var(--tmu);line-height:1.8;background:var(--ivw);padding:.75rem;border-left:3px solid var(--gold);margin-bottom:1rem}
+.settings-2col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.save-btn{background:var(--gd);color:var(--iv);border:none;padding:10px 24px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s;margin-top:.5rem}
+.save-btn:hover{background:var(--gs)}
+.save-btn.danger{background:var(--danger)}
+.save-btn.danger:hover{background:#a93226}
+
+/* ── LOADING STATE ── */
+.loading-msg{text-align:center;padding:3rem;color:var(--tmu);font-size:12px;letter-spacing:1px}
+.empty-msg{text-align:center;padding:2.5rem;color:var(--tmu);font-size:12px}
+
+/* ── ANALYTICS ── */
+.analytics-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+.chart-card{background:var(--white);border:1px solid var(--ivd);padding:1.25rem}
+.chart-card h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--gd);margin-bottom:1rem}
+.bar-chart{display:flex;flex-direction:column;gap:.5rem}
+.bar-row{display:flex;align-items:center;gap:.75rem;font-size:11px}
+.bar-label{width:160px;color:var(--tm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.bar-track{flex:1;background:var(--ivw);height:20px;position:relative}
+.bar-fill{height:100%;background:var(--gd);transition:width .5s ease}
+.bar-val{width:80px;text-align:right;color:var(--tmu);flex-shrink:0}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--gd);color:var(--iv);padding:10px 20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;z-index:999;transition:transform .3s;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(min-width:600px){
+  .stats-row{grid-template-columns:repeat(4,1fr)}
+  .settings-grid-wrap{grid-template-columns:1fr 1fr}
+  .analytics-grid{grid-template-columns:1fr 1fr}
+  .admin-body{padding:2rem 2.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="https://raw.githubusercontent.com/JosephElijah99/Beauty-Brand_Phone-Web/main/Images/RASAMI%20Beauty%20Logo.jpeg" alt="RASAMI Beauty" onerror="this.style.display='none'">
+      <div class="login-brand">RASAMI <em>Beauty</em></div>
+      <div class="login-sub">Admin Portal</div>
+    </div>
+    <h2 class="login-title">Sign In</h2>
+    <div class="login-err" id="loginErr"></div>
+    <div class="login-loading" id="loginLoading">Signing you in...</div>
+    <label class="form-lbl">Email Address</label>
+    <input class="form-inp" type="email" id="adminEmail" placeholder="rasamiskincare@outlook.com" autocomplete="email">
+    <label class="form-lbl">Password</label>
+    <input class="form-inp" type="password" id="adminPw" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-gold" style="width:100%;padding:13px;margin-top:.5rem" onclick="doLogin()">Sign In to Dashboard</button>
+    <div class="secure-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Secured by Supabase Authentication
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="admin-shell" id="adminShell">
+  <div class="admin-topbar">
+    <div class="atb-brand">
+      <img src="https://raw.githubusercontent.com/JosephElijah99/Beauty-Brand_Phone-Web/main/Images/RASAMI%20Beauty%20Logo.jpeg" alt="RASAMI" class="atb-logo-img" onerror="this.style.display='none'">
+      <div class="atb-name">RASAMI <em>Beauty</em> · Admin</div>
+    </div>
+    <div class="atb-right">
+      <span class="atb-user" id="adminUserEmail"></span>
+      <a class="atb-btn" href="index.html">← Store</a>
+      <button class="atb-btn danger" onclick="doLogout()">Log Out</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+    <div class="admin-page-title">Dashboard</div>
+    <div class="admin-page-sub">RASAMI Beauty · Store Management</div>
+
+    <div class="admin-tabs">
+      <button class="atab active" onclick="switchTab('overview',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Overview
+      </button>
+      <button class="atab" onclick="switchTab('orders',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Orders
+      </button>
+      <button class="atab" onclick="switchTab('customers',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Customers
+      </button>
+      <button class="atab" onclick="switchTab('products',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        Products
+      </button>
+      <button class="atab" onclick="switchTab('analytics',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+      </button>
+      <button class="atab" onclick="switchTab('emails',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Email Log
+      </button>
+      <button class="atab" onclick="switchTab('settings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </button>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div id="tab-overview">
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-val" id="st-orders">—</div><div class="stat-sub">All time</div></div>
+        <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-val" id="st-revenue">—</div><div class="stat-sub">NGN</div></div>
+        <div class="stat-card"><div class="stat-label">Customers</div><div class="stat-val" id="st-customers">—</div><div class="stat-sub">Unique</div></div>
+        <div class="stat-card"><div class="stat-label">Emails Sent</div><div class="stat-val" id="st-emails">—</div><div class="stat-sub">Notifications</div></div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>Recent Orders</h3><span id="recent-count"></span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="recentOrdersBody"><tr><td colspan="7" class="loading-msg">Loading orders...</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div id="tab-orders" style="display:none">
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>All Orders</h3><span id="all-orders-count"></span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Email</th><th>Phone</th><th>Address</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="allOrdersBody"><tr><td colspan="9" class="loading-msg">Loading...</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS TAB -->
+    <div id="tab-customers" style="display:none">
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>All Customers</h3><span id="customers-count"></span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Orders</th><th>Total Spent</th><th>Last Order</th></tr></thead>
+          <tbody id="customersBody"><tr><td colspan="6" class="loading-msg">Loading...</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS TAB -->
+    <div id="tab-products" style="display:none">
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>Product Stock Management</h3><span>Update inventory</span></div>
+        <div class="prod-admin-grid" id="adminProdGrid"></div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div id="tab-analytics" style="display:none">
+      <div class="analytics-grid">
+        <div class="chart-card">
+          <h4>Top Products by Revenue</h4>
+          <div class="bar-chart" id="chart-products"><div class="loading-msg">Loading...</div></div>
+        </div>
+        <div class="chart-card">
+          <h4>Orders by State</h4>
+          <div class="bar-chart" id="chart-states"><div class="loading-msg">Loading...</div></div>
+        </div>
+        <div class="chart-card">
+          <h4>Recent Daily Revenue</h4>
+          <div class="bar-chart" id="chart-daily"><div class="loading-msg">Loading...</div></div>
+        </div>
+        <div class="chart-card">
+          <h4>Quick Stats</h4>
+          <div id="quick-stats" class="bar-chart"><div class="loading-msg">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAIL LOG TAB -->
+    <div id="tab-emails" style="display:none">
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>Email Notifications Log</h3><span id="emails-count"></span></div>
+        <div class="email-entries" id="emailLogBody"><div class="loading-msg">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="tab-settings" style="display:none">
+      <div class="settings-grid-wrap">
+        <div class="settings-card">
+          <h3>Store Configuration</h3>
+          <div class="settings-note">For Paystack: go to <strong>paystack.com</strong> → Settings → API Keys → copy your Live Public Key.</div>
+          <label class="form-lbl">Paystack Public Key</label>
+          <input class="form-inp" id="s-pk" placeholder="pk_live_...">
+          <label class="form-lbl">WhatsApp Number (with +234)</label>
+          <input class="form-inp" id="s-wa" placeholder="+2347047572322" value="+2347047572322">
+          <label class="form-lbl">Store Owner Email</label>
+          <input class="form-inp" id="s-email" placeholder="rasamiskincare@outlook.com" value="rasamiskincare@outlook.com">
+          <label class="form-lbl">Store Name</label>
+          <input class="form-inp" id="s-name" value="RASAMI Beauty">
+          <div class="settings-2col">
+            <div><label class="form-lbl">Currency</label><input class="form-inp" value="NGN" readonly></div>
+            <div><label class="form-lbl">Mode</label><select class="form-inp" id="s-mode"><option>Test Mode</option><option>Live Mode</option></select></div>
+          </div>
+          <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+        </div>
+        <div class="settings-card">
+          <h3>Account & Security</h3>
+          <div class="settings-note">Your account is secured by Supabase Authentication. To change your password, use the Supabase dashboard or contact your administrator.</div>
+          <label class="form-lbl">Logged In As</label>
+          <input class="form-inp" id="settings-email-display" readonly style="background:var(--ivw);color:var(--tmu)">
+          <label class="form-lbl">Session Status</label>
+          <input class="form-inp" value="✅ Active — Supabase Auth" readonly style="background:var(--ivw);color:var(--success)">
+          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--ivd)">
+            <button class="save-btn danger" onclick="doLogout()" style="width:100%">Sign Out of Admin</button>
+          </div>
+          <div style="margin-top:1.5rem">
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--gd);margin-bottom:.75rem">Export Data</h3>
+            <button class="save-btn" onclick="exportCSV()" style="background:var(--gs)">Download Orders as CSV</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/app.js"></script>
+<script>
+const SUPA_URL_A = 'https://ngcrjrgybzsdnlxeuiu.supabase.co';
+const SUPA_KEY_A = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nY3JjanJneWJ6c2RubHhldWl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NDczMTksImV4cCI6MjA5NTAyMzMxOX0.fAIdQqhZSuOBXeZyYYID58KJZyVqAEo7T4VkTPvn0JU';
+
+async function dbFetch(table, query='', token=null){
+  const res = await fetch(`${SUPA_URL_A}/rest/v1/${table}${query}`, {
+    headers:{
+      'apikey': SUPA_KEY_A,
+      'Authorization': `Bearer ${token || SUPA_KEY_A}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  if(!res.ok) return [];
+  return res.json();
+}
+
+async function dbPost(table, body, token){
+  const res = await fetch(`${SUPA_URL_A}/rest/v1/${table}`, {
+    method:'POST',
+    headers:{
+      'apikey': SUPA_KEY_A,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(body)
+  });
+  return res.ok;
+}
+
+async function dbPatch(table, query, body, token){
+  const res = await fetch(`${SUPA_URL_A}/rest/v1/${table}${query}`, {
+    method:'PATCH',
+    headers:{
+      'apikey': SUPA_KEY_A,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  return res.ok;
+}
+
+/* ── AUTH ── */
+async function doLogin(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const pw = document.getElementById('adminPw').value;
+  if(!email||!pw){ showErr('Please enter your email and password.'); return; }
+
+  document.getElementById('loginLoading').classList.add('show');
+  document.getElementById('loginErr').classList.remove('show');
+
+  try{
+    const res = await fetch(`${SUPA_URL_A}/auth/v1/token?grant_type=password`, {
+      method:'POST',
+      headers:{'apikey':SUPA_KEY_A,'Content-Type':'application/json'},
+      body: JSON.stringify({email, password:pw})
+    });
+    const data = await res.json();
+    if(data.access_token){
+      sessionStorage.setItem('rasami_token', data.access_token);
+      sessionStorage.setItem('rasami_admin_email', data.user.email);
+      showDashboard(data.user.email, data.access_token);
+    } else {
+      showErr(data.error_description || 'Invalid email or password. Please try again.');
+    }
+  } catch(e){
+    showErr('Connection error. Please check your internet and try again.');
+  }
+  document.getElementById('loginLoading').classList.remove('show');
+}
+
+function showErr(msg){
+  const el=document.getElementById('loginErr');
+  el.textContent=msg; el.classList.add('show');
+}
+
+async function doLogout(){
+  const token = sessionStorage.getItem('rasami_token');
+  if(token){
+    await fetch(`${SUPA_URL_A}/auth/v1/logout`,{
+      method:'POST',
+      headers:{'apikey':SUPA_KEY_A,'Authorization':`Bearer ${token}`}
+    }).catch(()=>{});
+  }
+  sessionStorage.removeItem('rasami_token');
+  sessionStorage.removeItem('rasami_admin_email');
+  window.location.reload();
+}
+
+function showDashboard(email, token){
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('adminShell').classList.add('open');
+  document.getElementById('adminUserEmail').textContent=email;
+  document.getElementById('settings-email-display').value=email;
+  loadOverview(token);
+  renderAdminProducts(token);
+}
+
+/* ── AUTO LOGIN CHECK ── */
+const savedToken = sessionStorage.getItem('rasami_token');
+const savedEmail = sessionStorage.getItem('rasami_admin_email');
+if(savedToken && savedEmail){ showDashboard(savedEmail, savedToken); }
+
+/* ── TABS ── */
+const TABS=['overview','orders','customers','products','analytics','emails','settings'];
+function switchTab(name, btn){
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  TABS.forEach(t=>{ document.getElementById('tab-'+t).style.display=t===name?'block':'none'; });
+  const token = sessionStorage.getItem('rasami_token');
+  if(name==='overview') loadOverview(token);
+  if(name==='orders') loadOrders(token);
+  if(name==='customers') loadCustomers(token);
+  if(name==='analytics') loadAnalytics(token);
+  if(name==='emails') loadEmails(token);
+}
+
+/* ── OVERVIEW ── */
+async function loadOverview(token){
+  const [orders, customers, emails] = await Promise.all([
+    dbFetch('orders','?select=id,fname,lname,items,total,status,created_at&order=created_at.desc&limit=8',token),
+    dbFetch('customers','?select=count',token),
+    dbFetch('email_log','?select=count',token)
+  ]);
+  const revenue = orders.reduce ? 0 : 0;
+  // Get total revenue
+  const allOrders = await dbFetch('orders','?select=total',token);
+  const totalRev = Array.isArray(allOrders) ? allOrders.reduce((s,o)=>s+(parseFloat(o.total)||0),0) : 0;
+  const totalOrders = Array.isArray(allOrders) ? allOrders.length : 0;
+
+  document.getElementById('st-orders').textContent = totalOrders;
+  document.getElementById('st-revenue').textContent = '₦'+(totalRev/1000).toFixed(1)+'k';
+  document.getElementById('st-emails').textContent = Array.isArray(emails) ? emails.length : '—';
+
+  const custAll = await dbFetch('customers','?select=id',token);
+  document.getElementById('st-customers').textContent = Array.isArray(custAll) ? custAll.length : '—';
+
+  document.getElementById('recent-count').textContent = (Array.isArray(orders)?orders.length:0)+' recent';
+  const tbody = document.getElementById('recentOrdersBody');
+  if(!Array.isArray(orders)||!orders.length){
+    tbody.innerHTML='<tr><td colspan="7" class="empty-msg">No orders yet.</td></tr>'; return;
+  }
+  tbody.innerHTML = orders.map(o=>`
+    <tr>
+      <td style="font-weight:500;color:var(--gd)">${o.id}</td>
+      <td>${o.fname} ${o.lname}</td>
+      <td>${Array.isArray(o.items)?o.items.reduce((s,x)=>s+(x.qty||1),0):1}</td>
+      <td style="font-weight:500">₦${parseFloat(o.total).toLocaleString()}</td>
+      <td><span class="badge-${(o.status||'paid').toLowerCase()}">${o.status||'Paid'}</span></td>
+      <td style="color:var(--tmu)">${new Date(o.created_at).toLocaleDateString('en-NG',{day:'numeric',month:'short'})}</td>
+      <td><button class="act-btn" onclick="markShipped('${o.id}')">Ship</button></td>
+    </tr>`).join('');
+}
+
+/* ── ORDERS ── */
+async function loadOrders(token){
+  const orders = await dbFetch('orders','?select=*&order=created_at.desc',token);
+  document.getElementById('all-orders-count').textContent=(Array.isArray(orders)?orders.length:0)+' total';
+  const tbody=document.getElementById('allOrdersBody');
+  if(!Array.isArray(orders)||!orders.length){tbody.innerHTML='<tr><td colspan="9" class="empty-msg">No orders yet.</td></tr>';return;}
+  tbody.innerHTML=orders.map(o=>`
+    <tr>
+      <td style="font-weight:500;color:var(--gd)">${o.id}</td>
+      <td>${o.fname} ${o.lname}</td>
+      <td style="color:var(--tmu);font-size:11px">${o.email}</td>
+      <td>${o.phone||'—'}</td>
+      <td style="font-size:11px;max-width:150px;white-space:normal">${o.address||'—'}</td>
+      <td style="font-weight:500">₦${parseFloat(o.total).toLocaleString()}</td>
+      <td><span class="badge-${(o.status||'paid').toLowerCase()}">${o.status||'Paid'}</span></td>
+      <td style="color:var(--tmu)">${new Date(o.created_at).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</td>
+      <td><button class="act-btn" onclick="markShipped('${o.id}')">Mark Shipped</button></td>
+    </tr>`).join('');
+}
+
+async function markShipped(id){
+  const token=sessionStorage.getItem('rasami_token');
+  const ok = await dbPatch('orders',`?id=eq.${encodeURIComponent(id)}`,{status:'Shipped'},token);
+  if(ok){ showToast('Order '+id+' marked as shipped ✓'); loadOverview(token); loadOrders(token); }
+  else showToast('Update failed — try again');
+}
+
+/* ── CUSTOMERS ── */
+async function loadCustomers(token){
+  const customers=await dbFetch('customers','?select=*&order=total_spent.desc',token);
+  document.getElementById('customers-count').textContent=(Array.isArray(customers)?customers.length:0)+' customers';
+  const tbody=document.getElementById('customersBody');
+  if(!Array.isArray(customers)||!customers.length){tbody.innerHTML='<tr><td colspan="6" class="empty-msg">No customers yet.</td></tr>';return;}
+  tbody.innerHTML=customers.map(c=>`
+    <tr>
+      <td style="font-weight:500">${c.fname||''} ${c.lname||''}</td>
+      <td style="color:var(--tmu)">${c.email}</td>
+      <td>${c.phone||'—'}</td>
+      <td style="text-align:center">${c.total_orders||1}</td>
+      <td style="font-weight:500;color:var(--gd)">₦${parseFloat(c.total_spent||0).toLocaleString()}</td>
+      <td style="color:var(--tmu)">${c.last_order?new Date(c.last_order).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}):'—'}</td>
+    </tr>`).join('');
+}
+
+/* ── PRODUCTS ── */
+function renderAdminProducts(token){
+  document.getElementById('adminProdGrid').innerHTML=PRODUCTS.map(p=>`
+    <div class="pa-card">
+      <div class="pa-top">
+        <img class="pa-img" src="${p.image}" alt="${p.name}" onerror="this.style.display='none'">
+        <div><div class="pa-name">${p.name}</div><div class="pa-cat">${p.cat}</div><div class="pa-price">₦${p.price.toLocaleString()}</div></div>
+      </div>
+      <div class="pa-stock-row">
+        <span class="sd ${p.stock>10?'in':p.stock>0?'low':'out'}"></span>
+        ${p.stock>0?p.stock+' units in stock':'Out of stock'}
+      </div>
+      <div class="pa-btns">
+        <button class="act-btn" onclick="restockProd(${p.id})">+ Restock</button>
+        <button class="act-btn" onclick="toggleProd(${p.id})">${p.stock>0?'Mark Out':'Mark In'}</button>
+      </div>
+    </div>`).join('');
+}
+function restockProd(id){const p=PRODUCTS.find(x=>x.id===id);if(p){p.stock+=20;renderAdminProducts();showToast(p.name+' restocked ✓');}}
+function toggleProd(id){const p=PRODUCTS.find(x=>x.id===id);if(p){p.stock=p.stock>0?0:20;renderAdminProducts();showToast(p.name+' updated');}}
+
+/* ── ANALYTICS ── */
+async function loadAnalytics(token){
+  const orders = await dbFetch('orders','?select=items,total,address,created_at',token);
+  if(!Array.isArray(orders)||!orders.length){
+    ['chart-products','chart-states','chart-daily','quick-stats'].forEach(id=>{
+      document.getElementById(id).innerHTML='<div class="empty-msg">No data yet.</div>';
+    }); return;
+  }
+
+  // Products chart
+  const prodMap={};
+  orders.forEach(o=>{
+    if(Array.isArray(o.items)) o.items.forEach(it=>{
+      prodMap[it.name]=(prodMap[it.name]||0)+((it.price||0)*(it.qty||1));
+    });
+  });
+  const prodSorted=Object.entries(prodMap).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxProd=prodSorted[0]?.[1]||1;
+  document.getElementById('chart-products').innerHTML=prodSorted.map(([name,rev])=>`
+    <div class="bar-row">
+      <div class="bar-label">${name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(rev/maxProd*100).toFixed(1)}%"></div></div>
+      <div class="bar-val">₦${(rev/1000).toFixed(1)}k</div>
+    </div>`).join('');
+
+  // States chart
+  const stateMap={};
+  orders.forEach(o=>{
+    if(o.address){const parts=o.address.split(', ');const st=parts[parts.length-1];if(st) stateMap[st]=(stateMap[st]||0)+1;}
+  });
+  const stateSorted=Object.entries(stateMap).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxState=stateSorted[0]?.[1]||1;
+  document.getElementById('chart-states').innerHTML=stateSorted.length?stateSorted.map(([st,cnt])=>`
+    <div class="bar-row">
+      <div class="bar-label">${st}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(cnt/maxState*100).toFixed(1)}%"></div></div>
+      <div class="bar-val">${cnt} orders</div>
+    </div>`).join(''):'<div class="empty-msg">No location data</div>';
+
+  // Daily revenue (last 7 days)
+  const dayMap={};
+  orders.forEach(o=>{
+    const d=new Date(o.created_at).toLocaleDateString('en-NG',{month:'short',day:'numeric'});
+    dayMap[d]=(dayMap[d]||0)+(parseFloat(o.total)||0);
+  });
+  const daySorted=Object.entries(dayMap).slice(-7);
+  const maxDay=Math.max(...daySorted.map(x=>x[1]),1);
+  document.getElementById('chart-daily').innerHTML=daySorted.length?daySorted.reverse().map(([d,rev])=>`
+    <div class="bar-row">
+      <div class="bar-label">${d}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(rev/maxDay*100).toFixed(1)}%"></div></div>
+      <div class="bar-val">₦${(rev/1000).toFixed(1)}k</div>
+    </div>`).join(''):'<div class="empty-msg">No data</div>';
+
+  // Quick stats
+  const totalRev=orders.reduce((s,o)=>s+(parseFloat(o.total)||0),0);
+  const avgOrder=totalRev/orders.length;
+  document.getElementById('quick-stats').innerHTML=`
+    <div class="bar-row" style="flex-direction:column;align-items:flex-start;gap:.25rem">
+      <div style="font-size:11px;color:var(--tmu);letter-spacing:1px;text-transform:uppercase">Total Revenue</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gd)">₦${totalRev.toLocaleString()}</div>
+    </div>
+    <div class="bar-row" style="flex-direction:column;align-items:flex-start;gap:.25rem;margin-top:1rem">
+      <div style="font-size:11px;color:var(--tmu);letter-spacing:1px;text-transform:uppercase">Avg Order Value</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gd)">₦${avgOrder.toLocaleString('en-NG',{maximumFractionDigits:0})}</div>
+    </div>
+    <div class="bar-row" style="flex-direction:column;align-items:flex-start;gap:.25rem;margin-top:1rem">
+      <div style="font-size:11px;color:var(--tmu);letter-spacing:1px;text-transform:uppercase">Total Orders</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gd)">${orders.length}</div>
+    </div>`;
+}
+
+/* ── EMAIL LOG ── */
+async function loadEmails(token){
+  const emails=await dbFetch('email_log','?select=*&order=sent_at.desc&limit=50',token);
+  document.getElementById('emails-count').textContent=(Array.isArray(emails)?emails.length:0)+' sent';
+  const el=document.getElementById('emailLogBody');
+  if(!Array.isArray(emails)||!emails.length){el.innerHTML='<div class="empty-msg">No emails sent yet.</div>';return;}
+  el.innerHTML=emails.map(e=>`
+    <div class="email-entry">
+      <div class="email-icon-box">${e.type==='customer'?'📧':'🔔'}</div>
+      <div style="flex:1">
+        <div class="email-to">${e.type==='customer'?'Customer':'Store Owner'}: ${e.recipient}</div>
+        <div class="email-sub">${e.subject}</div>
+        <div class="email-time">${new Date(e.sent_at).toLocaleString('en-NG',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <span class="email-sent-badge">Sent</span>
+    </div>`).join('');
+}
+
+/* ── SETTINGS ── */
+function saveSettings(){
+  const cfg={
+    pk:document.getElementById('s-pk').value||CFG.pk,
+    wa:document.getElementById('s-wa').value,
+    email:document.getElementById('s-email').value,
+    name:document.getElementById('s-name').value
+  };
+  localStorage.setItem('rasami_cfg',JSON.stringify(cfg));
+  Object.assign(CFG,cfg);
+  showToast('Settings saved ✓');
+}
+
+/* ── EXPORT CSV ── */
+async function exportCSV(){
+  const token=sessionStorage.getItem('rasami_token');
+  const orders=await dbFetch('orders','?select=*&order=created_at.desc',token);
+  if(!Array.isArray(orders)||!orders.length){showToast('No orders to export');return;}
+  const headers=['Order ID','Date','First Name','Last Name','Email','Phone','Address','Items','Total','Status','Payment Ref'];
+  const rows=orders.map(o=>[
+    o.id,
+    new Date(o.created_at).toLocaleDateString('en-NG'),
+    o.fname,o.lname,o.email,o.phone||'',o.address||'',
+    Array.isArray(o.items)?o.items.map(i=>`${i.name}x${i.qty}`).join('|'):'',
+    o.total,o.status||'Paid',o.ref||''
+  ]);
+  const csv=[headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`rasami-orders-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('CSV downloaded ✓');
+}
+
+/* ── TOAST ── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* ── SETTINGS LOAD ── */
+document.getElementById('s-pk').value=CFG.pk||'';
+</script>
+</body>
+</html>

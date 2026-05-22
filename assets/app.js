@@ -71,7 +71,7 @@ const PRODUCTS=[
    caution:"For external use only. Avoid contact with eyes. Turmeric may temporarily stain light-coloured towels. Perform a patch test before first use if you have sensitive skin. Discontinue use if irritation occurs. Keep out of reach of children. Store in a cool, dry place away from direct sunlight.",stock:30},
 ];
 
-let CFG=JSON.parse(localStorage.getItem('rasami_cfg')||'null')||{pk:'pk_test_demo_rasami_beauty_2024',wa:'+2348000000001',email:'admin@rasamibeauty.com',name:'RASAMI Beauty'};
+let CFG=JSON.parse(localStorage.getItem('rasami_cfg')||'null')||{pk:'pk_test_demo_rasami_beauty_2024',wa:'+2348000000001',email:'rasamiskincare@outlook.com',name:'RASAMI Beauty'};
 let cart=JSON.parse(sessionStorage.getItem('rasami_cart')||'[]');
 let orders=JSON.parse(sessionStorage.getItem('rasami_orders')||'[]');
 let emailLog=JSON.parse(sessionStorage.getItem('rasami_emails')||'[]');
@@ -284,7 +284,7 @@ function renderFooter(){
       </div>
       <div class="footer-col"><h4>Shop</h4><a href="index.html">All Products</a><a href="index.html">Face Serums</a><a href="index.html">Moisturizers</a><a href="index.html">Body Care</a><a href="index.html">Artisan Soaps</a></div>
       <div class="footer-col"><h4>Company</h4><a href="about.html">About Us</a><a href="blog.html">Blog / Journal</a><a href="contact.html">Contact Us</a><a href="faq.html">FAQs</a><a href="https://www.instagram.com/rasamibeauty/" target="_blank">Instagram</a></div>
-      <div class="footer-col"><h4>Support</h4><span>✉️ hello@rasamibeauty.com</span><span>Mon–Sat · 8am–6pm</span>
+      <div class="footer-col"><h4>Support</h4><span>✉️ rasamiskincare@outlook.com</span><span>Mon–Sat · 8am–6pm</span>
         <button class="wa-footer-btn" onclick="openWhatsApp('Hello! I need help with my RASAMI Beauty order.')">${WA_ICON} WhatsApp Support</button>
       </div>
     </div>

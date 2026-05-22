@@ -151,9 +151,9 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--ivw)}
         <label class="form-lbl">Paystack Public Key</label>
         <input class="form-inp" id="s-pk">
         <label class="form-lbl">WhatsApp Business Number (with country code)</label>
-        <input class="form-inp" id="s-wa" placeholder="+2348012345678">
+        <input class="form-inp" id="s-wa" placeholder="+2347047572322" value="+2347047572322">
         <label class="form-lbl">Store Owner Email</label>
-        <input class="form-inp" id="s-email">
+        <input class="form-inp" id="s-email" value="rasamiskincare@outlook.com">
         <label class="form-lbl">Store Name</label>
         <input class="form-inp" id="s-name">
         <div class="settings-grid">
@@ -172,7 +172,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--ivw)}
       </div>
       <div class="help-section"><h3>Deployment Guide</h3>
         <div class="help-step"><div class="step-num">1</div><div class="step-info"><h4>Upload to Vercel or Netlify</h4><p>Upload the entire project folder (all .html files + assets/ folder) as a ZIP or via GitHub.</p></div></div>
-        <div class="help-step"><div class="step-num">2</div><div class="step-info"><h4>Connect your domain</h4><p>Buy <code>rasamabeauty.com</code> and connect it in your hosting DNS settings.</p></div></div>
+        <div class="help-step"><div class="step-num">2</div><div class="step-info"><h4>Connect your domain</h4><p>Buy <code>rasamibeauty.com</code> and connect it in your hosting DNS settings.</p></div></div>
         <div class="help-step"><div class="step-num">3</div><div class="step-info"><h4>Add your real Paystack key</h4><p>Paste your <code>pk_live_...</code> key above and save.</p></div></div>
         <div class="help-step"><div class="step-num">4</div><div class="step-info"><h4>Update WhatsApp number</h4><p>Enter your real WhatsApp Business number above so customers reach you directly.</p></div></div>
         <div class="help-step"><div class="step-num">5</div><div class="step-info"><h4>Change your admin password</h4><p>Use the form above to replace the default password with something secure.</p></div></div>
@@ -186,7 +186,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--ivw)}
 <script src="assets/app.js"></script>
 <script>
 /* PASSWORD AUTH */
-const DEFAULT_PW = 'rasama2024';
+const DEFAULT_PW = 'rasami2024';
 function getStoredPw(){ return localStorage.getItem('rasama_admin_pw') || DEFAULT_PW; }
 
 function doLogin(){

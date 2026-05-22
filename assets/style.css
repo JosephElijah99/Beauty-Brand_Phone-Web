@@ -17,7 +17,7 @@ img{max-width:100%;display:block}
 /* ── NAV ── */
 nav{background:var(--gd);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200}
 .nav-logo{display:flex;align-items:center;flex-shrink:0}
-.nav-logo-img{height:38px;width:auto;object-fit:contain;display:block}
+.nav-logo-img{height:42px;width:42px;object-fit:cover;display:block;border-radius:50%;border:2px solid rgba(184,150,90,.4)}
 .nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--iv);letter-spacing:2px;text-transform:uppercase}
 .nav-logo-text em{color:var(--goldl);font-style:italic}
 .nav-links{display:none;gap:1.25rem;align-items:center}

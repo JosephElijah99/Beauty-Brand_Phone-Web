@@ -16,8 +16,10 @@ img{max-width:100%;display:block}
 
 /* ── NAV ── */
 nav{background:var(--gd);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--iv);letter-spacing:2px;text-transform:uppercase;flex-shrink:0}
-.nav-logo em{color:var(--goldl);font-style:italic}
+.nav-logo{display:flex;align-items:center;flex-shrink:0}
+.nav-logo-img{height:38px;width:auto;object-fit:contain;display:block}
+.nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--iv);letter-spacing:2px;text-transform:uppercase}
+.nav-logo-text em{color:var(--goldl);font-style:italic}
 .nav-links{display:none;gap:1.25rem;align-items:center}
 .nav-links.mob-open{display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:var(--gd);padding:1.5rem;gap:1rem;z-index:250;border-top:1px solid rgba(255,255,255,.1)}
 .nl{color:rgba(248,244,236,.8);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:300;cursor:pointer;transition:color .2s;text-decoration:none;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.08);width:100%;display:block}

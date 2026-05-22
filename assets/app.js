@@ -15,7 +15,7 @@ const PRODUCTS=[
    caution:"For external use only. Avoid contact with eyes. Keep out of reach of children. Store in a cool, dry place away from direct sunlight.",stock:25},
   {id:2,name:"Niacinamide Face Serum",cat:"Serum",price:9000,badge:"Bestseller",isNew:false,
    keyIngredients:"Niacinamide · N-Acetyl Glucosamine · Alpha Arbutin",
-   image:rawUrl("https://github.com/JosephElijah99/Rasama-Beauty-Brand-Website/blob/main/Images/Niacinamide%20Face%20Serum%202.jpeg"),
+   image:"https://raw.githubusercontent.com/JosephElijah99/Beauty-Brand_Phone-Web/main/Images/Niacinamide%20Face%20Serum%201.jpeg",
    desc:"A lightweight serum infused with niacinamide and other active ingredients that work in synergy to promote smooth, even skin, helping to refine skin tone and texture for a brighter, healthier-looking skin.",
    benefits:["Promotes smooth texture","Brightens, refines skin tone","Helps fade dark marks post acne"],
    ingredients:"Aqua, Niacinamide, Butylene Glycol, N-Acetyl Glucosamine, Propanediol, Alpha Arbutin, Betaine, Xanthan Gum, Polyquaternium 10, Sodium Citrate, Propylene Glycol, Diazolidinyl Urea, Iodopropynyl Butylcarbamate.",
@@ -47,7 +47,7 @@ const PRODUCTS=[
    caution:"Do not rub or scrub too hard to avoid micro tears. For external use only. Avoid contact with eyes. Keep out of reach of children. Store in a cool, dry place away from direct sunlight.",stock:22},
   {id:6,name:"Velvet Oat & Licorice Shower Milk",cat:"Body",price:29500,badge:"Bestseller",isNew:false,
    keyIngredients:"Colloidal Oat · Licorice Root Extract",
-   image:rawUrl("https://github.com/JosephElijah99/Rasama-Beauty-Brand-Website/blob/main/Images/Velvet%20Oat%20%26%20Licorice%20Shower%20Milk%202%20(Pair).jpeg"),
+   image:"https://raw.githubusercontent.com/JosephElijah99/Beauty-Brand_Phone-Web/main/Images/Velvet%20oat%20%26%20Licorice%20Shower%20Milk%20Real.jpeg",
    desc:"Gently cleanses and brightens without stripping the skin of its natural oils. Combines the soothing, moisturizing properties of colloidal oatmeal with the brightening and anti-inflammatory benefits of licorice root (Mulethi).",
    benefits:["Ideal for sensitive skin conditions including eczema, rashes, and psoriasis","Mild exfoliation","Fades dark spots"],
    ingredients:"Water, Sodium C14-16 Olefin Sulfonate, Cocamidopropyl Betaine, Glycerin, Polysorbate 20, Decyl Glucoside, Polyquaternium 7, PEG-120 Methyl Glucose Dioleate, Glycol Distearate, Avena Sativa Kernel Flour, Glycyrrhiza Glabra Root Extract, Fragrance, Propylene Glycol, Iodopropynyl Butylcarbamate, Diazolidinyl Urea.",
@@ -63,7 +63,7 @@ const PRODUCTS=[
    caution:"For external use only. Avoid contact with eyes. Keep out of reach of children. Store in a cool, dry place away from direct sunlight.",stock:19},
   {id:8,name:"Golden Glow Turmeric & Honey Soap",cat:"Soap",price:12000,badge:"New",isNew:true,
    keyIngredients:"Turmeric · Raw Honey · Shea Butter · Vitamin E",
-   image:rawUrl("https://github.com/JosephElijah99/Rasama-Beauty-Brand-Website/blob/main/Images/Tumeric%20%26%20Honey%20Artisan%20Soap%201.jpeg"),
+   image:"https://raw.githubusercontent.com/JosephElijah99/Beauty-Brand_Phone-Web/main/Images/Tumeric%20and%20Honey%20Real.jpeg",
    desc:"A handcrafted artisan bar that combines the ancient healing power of turmeric with the skin-softening richness of raw honey. Gently cleanses while brightening dull skin, fading dark spots, and leaving your complexion radiant, smooth, and deeply nourished. Suitable for all skin types.",
    benefits:["Brightens and evens out skin tone","Fades dark spots and hyperpigmentation","Deeply moisturises and softens skin","Anti-inflammatory — soothes irritated skin","Gentle, natural formula suitable for all skin types"],
    ingredients:"Saponified Coconut Oil, Saponified Palm Oil, Shea Butter, Raw Honey, Turmeric Powder (Curcuma longa), Castor Oil, Vitamin E Oil, Distilled Water, Sodium Hydroxide (no lye remains in the finished bar), Natural Fragrance.",
@@ -246,7 +246,10 @@ function injectCartAndModal(){
 function renderNav(){
   document.body.insertAdjacentHTML('afterbegin',`
   <nav>
-    <a class="nav-logo" href="index.html">RASAMI <em>Beauty</em></a>
+    <a class="nav-logo" href="index.html">
+      <img src="https://raw.githubusercontent.com/JosephElijah99/Beauty-Brand_Phone-Web/main/Images/RASAMI%20Beauty%20Logo.jpeg" alt="RASAMI Beauty" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span class="nav-logo-text" style="display:none">RASAMI <em>Beauty</em></span>
+    </a>
     <div class="nav-links" id="navLinks">
       <a class="nl" href="index.html">Shop</a>
       <a class="nl" href="about.html">About Us</a>

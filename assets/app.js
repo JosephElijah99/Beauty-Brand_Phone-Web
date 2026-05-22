@@ -71,7 +71,7 @@ const PRODUCTS=[
    caution:"For external use only. Avoid contact with eyes. Turmeric may temporarily stain light-coloured towels. Perform a patch test before first use if you have sensitive skin. Discontinue use if irritation occurs. Keep out of reach of children. Store in a cool, dry place away from direct sunlight.",stock:30},
 ];
 
-let CFG=JSON.parse(localStorage.getItem('rasami_cfg')||'null')||{pk:'pk_test_demo_rasami_beauty_2024',wa:'+2348000000001',email:'rasamiskincare@outlook.com',name:'RASAMI Beauty'};
+let CFG=JSON.parse(localStorage.getItem('rasami_cfg')||'null')||{pk:'pk_test_demo_rasami_beauty_2024',wa:'+2347047572322',email:'rasamiskincare@outlook.com',name:'RASAMI Beauty'};
 let cart=JSON.parse(sessionStorage.getItem('rasami_cart')||'[]');
 let orders=JSON.parse(sessionStorage.getItem('rasami_orders')||'[]');
 let emailLog=JSON.parse(sessionStorage.getItem('rasami_emails')||'[]');

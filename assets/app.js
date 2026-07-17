@@ -1,7 +1,7 @@
 /* ── RASAMI Beauty – app.js with Supabase Backend ── */
 
 /* ── SUPABASE CONFIG ── */
-const SUPA_URL = 'https://ngcrjrgybzsdnlxeuiu.supabase.co';
+const SUPA_URL = 'https://ngcrcjrgybzsdnlxeuiu.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nY3JjanJneWJ6c2RubHhldWl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NDczMTksImV4cCI6MjA5NTAyMzMxOX0.fAIdQqhZSuOBXeZyYYID58KJZyVqAEo7T4VkTPvn0JU';
 
 /* ── SUPABASE API HELPER ── */
@@ -126,7 +126,7 @@ const PRODUCTS=[
 
 /* ── SETTINGS ── */
 let CFG = JSON.parse(localStorage.getItem('rasami_cfg')||'null')||{
-  pk:'pk_test_demo_rasami_beauty_2024',
+  pk:pk_live_65f452eda574b09fcb6edce23919dd28d0e76bd8,
   wa:'+2347047572322',
   email:'rasamiskincare@outlook.com',
   name:'RASAMI Beauty'
@@ -255,41 +255,52 @@ function initiatePaystack(){
   h.openIframe();
 }
 
+
 async function onPaySuccess(fn,ln,em,ph,ad,ci,st,total,ref){
   const oid='#RB-'+(Date.now().toString().slice(-6));
   const now=new Date();
-  const ds=now.toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'});
-  const ts=now.toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
   const address=ad+(ci?', '+ci:'')+(st?', '+st:'');
-
-  // ── SAVE TO SUPABASE ──
-  const orderData = {
-    id: oid,
-    ref: ref,
-    fname: fn,
-    lname: ln,
-    email: em,
-    phone: ph,
-    address: address,
+ 
+  const order = {
+    id: oid, fname: fn, lname: ln, email: em, phone: ph, address: address,
     items: cart.map(x=>({id:x.id,name:x.name,price:x.price,qty:x.qty})),
-    total: total,
-    status: 'Paid'
+    total: total
   };
-
-  // Save order
-  const saved = await supa('POST', 'orders', orderData);
-  if(!saved) console.warn('Order save failed — check Supabase');
-
-  // Save/update customer
-  const custData = { email:em, fname:fn, lname:ln, phone:ph, last_order:now.toISOString() };
-  await supa('POST', 'customers', {...custData, total_orders:1, total_spent:total, first_order:now.toISOString()},
-    '?on_conflict=email').catch(()=>{});
-
-  // Log emails
-  await supa('POST', 'email_log', {order_id:oid, recipient:em, subject:`Order Confirmed – ${oid}`, type:'customer'});
-  await supa('POST', 'email_log', {order_id:oid, recipient:CFG.email, subject:`New Order ${oid} – ₦${total.toLocaleString()}`, type:'owner'});
-
-  // Show success
+  const customer = {
+    email: em, fname: fn, lname: ln, phone: ph,
+    last_order: now.toISOString(), total_orders: 1,
+    total_spent: total, first_order: now.toISOString()
+  };
+  const emails = [
+    { order_id: oid, recipient: em, subject: `Order Confirmed – ${oid}`, type: 'customer' },
+    { order_id: oid, recipient: CFG.email, subject: `New Order ${oid} – ₦${total.toLocaleString()}`, type: 'owner' }
+  ];
+ 
+  showToast('Verifying payment...');
+ 
+  let data;
+  try {
+    const res = await fetch(`${SUPA_URL}/functions/v1/verify-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`
+      },
+      body: JSON.stringify({ reference: ref, order, customer, emails })
+    });
+    data = await res.json();
+  } catch (e) {
+    showToast('Could not reach server — contact support with your reference: ' + ref);
+    return;
+  }
+ 
+  if (!data || !data.success) {
+    showToast('Payment could not be verified. Contact support with reference: ' + ref);
+    return;
+  }
+ 
+  // Show success — same as before
   const cep=document.getElementById('custEmailPreview');
   const oep=document.getElementById('ownerEmailPreview');
   if(cep) cep.innerHTML=`To: <strong>${em}</strong><br>Subject: Order Confirmed – ${oid}`;
@@ -297,7 +308,7 @@ async function onPaySuccess(fn,ln,em,ph,ad,ci,st,total,ref){
   const fa=document.getElementById('checkoutFormArea'); if(fa) fa.style.display='none';
   const sv=document.getElementById('successView'); if(sv) sv.classList.add('show');
   cart=[]; saveCart(); updateCartUI();
-  showToast('Order saved to database ✓');
+  showToast('Order confirmed ✓');
 }
 
 function resetAfterOrder(){

@@ -126,7 +126,7 @@ const PRODUCTS=[
 
 /* ── SETTINGS ── */
 let CFG = JSON.parse(localStorage.getItem('rasami_cfg')||'null')||{
-  pk:pk_live_65f452eda574b09fcb6edce23919dd28d0e76bd8,
+  pk:'pk_live_65f452eda574b09fcb6edce23919dd28d0e76bd8',
   wa:'+2347047572322',
   email:'rasamiskincare@outlook.com',
   name:'RASAMI Beauty'
